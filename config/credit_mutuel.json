@@ -1,0 +1,37 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date" ],
+    "colMin" : 14,
+    "colMax" : 20,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 24,
+    "value" : ""
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Opération" ],
+    "colMin" : 39,
+    "colMax" : 50,
+    "colMinLimit" : 37,
+    "colMaxLimit" : 92,
+    "value" : "IR FACTURE  WIPEA MARS"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "Débit  EUROS" ],
+    "colMin" : 101,
+    "colMax" : 115,
+    "colMinLimit" : 101,
+    "colMaxLimit" : 118,
+    "value" : "178,80"
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "Crédit  EUROS" ],
+    "colMin" : 119,
+    "colMax" : 134,
+    "colMinLimit" : 119,
+    "colMaxLimit" : 147,
+    "value" : ""
+  } ]
+}

@@ -1,0 +1,45 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "DATE" ],
+    "colMin" : 0,
+    "colMax" : 0,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 0,
+    "value" : null
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "NATURE", "DE", "L’OPERATION" ],
+    "colMin" : 0,
+    "colMax" : 0,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 0,
+    "value" : null
+  }, {
+    "columnType" : "UNUSED",
+    "names" : [ "VALEUR" ],
+    "colMin" : 0,
+    "colMax" : 0,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 0,
+    "value" : null
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "DEBIT" ],
+    "colMin" : 0,
+    "colMax" : 0,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 0,
+    "value" : null
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "CREDIT" ],
+    "colMin" : 0,
+    "colMax" : 0,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 0,
+    "value" : null
+  } ]
+}

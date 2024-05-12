@@ -1,0 +1,45 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "DATE" ],
+    "colMin" : 9,
+    "colMax" : 15,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 17,
+    "value" : ""
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "LIBELLE" ],
+    "colMin" : 48,
+    "colMax" : 57,
+    "colMinLimit" : 18,
+    "colMaxLimit" : 65,
+    "value" : ""
+  }, {
+    "columnType" : "UNUSED",
+    "names" : [ "VALEUR" ],
+    "colMin" : 90,
+    "colMax" : 98,
+    "colMinLimit" : 11,
+    "colMaxLimit" : 107,
+    "value" : "5.05                                                      SOLDE  EN  EUROS"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "DEBIT" ],
+    "colMin" : 107,
+    "colMax" : 114,
+    "colMinLimit" : 109,
+    "colMaxLimit" : 127,
+    "value" : ""
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "CREDIT" ],
+    "colMin" : 125,
+    "colMax" : 133,
+    "colMinLimit" : 127,
+    "colMaxLimit" : 152,
+    "value" : "41 507,10"
+  } ]
+}
