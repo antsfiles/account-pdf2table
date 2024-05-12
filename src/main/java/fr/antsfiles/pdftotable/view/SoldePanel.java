@@ -31,7 +31,7 @@ public class SoldePanel extends javax.swing.JPanel {
 
     public void updateSoldeAfter() {
         if (jTextFieldSoldeBefore.getText().isBlank()) {
-            jLabelSoldeAfter.setText("0");
+            jTextFieldSoldeBefore.setText("0");
         }
         double before = Double.parseDouble(jTextFieldSoldeBefore.getText().replace(",", "."));
         double after = before + totalCredit - totalDebit;
