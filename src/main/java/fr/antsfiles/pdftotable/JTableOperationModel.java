@@ -56,10 +56,12 @@ public class JTableOperationModel extends AbstractTableModel {
                 return operations.get(rowIndex).getDescription();
             }
             case 2 -> {
-                return operations.get(rowIndex).getAmount();
+                double v = operations.get(rowIndex).getAmount();
+                return Double.isNaN(v) ? "": v;
             }
             case 3 -> {
-                return operations.get(rowIndex).getCreditamount();
+                double v = operations.get(rowIndex).getCreditamount();
+                return Double.isNaN(v) ? "": v;
             }
             default -> {
             }
