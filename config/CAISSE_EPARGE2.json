@@ -1,0 +1,45 @@
+{
+  "space" : "   ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date" ],
+    "colMin" : 34,
+    "colMax" : 40,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 42,
+    "value" : ""
+  }, {
+    "columnType" : "UNUSED",
+    "names" : [ "Valeur" ],
+    "colMin" : 41,
+    "colMax" : 49,
+    "colMinLimit" : 40,
+    "colMaxLimit" : 48,
+    "value" : "invito"
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Détail des opérations" ],
+    "colMin" : 48,
+    "colMax" : 71,
+    "colMinLimit" : 50,
+    "colMaxLimit" : 109,
+    "value" : "à  en prendre  connaissance  sur  notre site  Internet"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "Débit" ],
+    "colMin" : 113,
+    "colMax" : 120,
+    "colMinLimit" : 112,
+    "colMaxLimit" : 126,
+    "value" : ""
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "Crédit" ],
+    "colMin" : 134,
+    "colMax" : 142,
+    "colMinLimit" : 131,
+    "colMaxLimit" : 147,
+    "value" : ""
+  } ]
+}

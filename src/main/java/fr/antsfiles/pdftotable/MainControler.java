@@ -129,6 +129,7 @@ public class MainControler {
             }
             TableHeader tableHeader = tableHeaderManual != null ? tableHeaderManual : parser.getTableHeader();
             ZoneTableDetect zoneTableDetect = new ZoneTableDetect();
+            zoneTableDetect.setYear(year.getValue());
             zoneTableDetect.detectTable(tableHeader, pages);
 
             StringBuilder sbIn = new StringBuilder();

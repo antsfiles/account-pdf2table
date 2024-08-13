@@ -32,6 +32,14 @@ public class ZoneTableDetect {
     private List<Operation> operations = new ArrayList<>();
     private List<String> excludedFilter = List.of("Solde précédent", "Nouveau solde", "Nouveau  solde");
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public void detectTable(TableHeader tableHeader, List<Page> pages) {
         lineHeader = 0;
         operations.clear();
