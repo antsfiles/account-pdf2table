@@ -26,7 +26,7 @@ public class ZoneTableDetect {
     private static final String REGEX_AMOUNT_POINT_THOUSAND = "\\d{1,3}(?:[\\.]{0,2}\\d{3})*(?:,\\d{2})";
     private static final String REGEX_AMOUNT_SPACE_THOUSAND = "\\d{1,3}(?:[\\s]{0,2}\\d{3})*(?:,\\d{2})";
 
-    private int lineHeader = 0;
+    private int lineHeader = -1;
     private String year = "2023";
     private TableHeader tableHeader;
     private List<Operation> operations = new ArrayList<>();
@@ -76,7 +76,7 @@ public class ZoneTableDetect {
                 }
                 continue;
             }
-            if (lineHeader > 0) {
+            if (lineHeader >= 0) {
                 boolean isRow = false;
                 for (int i = 0; i < tableHeader.getHeaderNames().size(); i++) {
                     TableHeaderName tableHeaderName = tableHeader.getHeaderNames().get(i);
