@@ -208,10 +208,16 @@ public class ZoneTableDetect {
     private String readCol(TableHeaderName headerName, String line) {
         System.out.println("read: " + line);
         if (line.length() < headerName.getColMaxLimit()) {
+            //return "";
+            line = line;
+        }
+        if (line.length() < headerName.getColMinLimit()) {
             return "";
         }
-        String extractLine = line.substring(headerName.getColMinLimit(), headerName.getColMaxLimit()).trim();
-        String extractCenter = line.substring(headerName.getColMin(), headerName.getColMax()).trim();
+        int max = Math.min(headerName.getColMaxLimit(), line.length());
+        String extractLine = line.substring(headerName.getColMinLimit(), max).trim();
+        max = Math.min(headerName.getColMax(), line.length());
+        String extractCenter = line.substring(headerName.getColMin(), max).trim();
         if (Objects.equals(extractCenter, extractLine)) {
             //we can use this directly
             return extractLine;
@@ -220,10 +226,19 @@ public class ZoneTableDetect {
                 return extractLine;
             }
             if (headerName.getColumnType() == ColumnType.DEBIT || headerName.getColumnType() == ColumnType.CREDIT) {
-                extractLine = extractLine.replace("+", "");
-                extractLine = extractLine.replace("-", "");
+                extractLine = extractLine.replaceAll(" ", "");
+
                 extractLine = extractLine.replace("EUR", "");
                 extractLine = extractLine.replace("€", "").trim();
+                if(extractLine.indexOf('-') >= 0 &&  headerName.getColumnType() == ColumnType.CREDIT){
+                    return "";
+                }
+                if(extractLine.indexOf('+') >= 0 &&  headerName.getColumnType() == ColumnType.DEBIT){
+                    return "";
+                }
+
+                extractLine = extractLine.replace("+", "");
+                extractLine = extractLine.replace("-", "");
 
                 if (".".equals(tableHeader.getValueCentsSeperator())) {
                     extractLine = extractLine.replace(".", ",").trim();
