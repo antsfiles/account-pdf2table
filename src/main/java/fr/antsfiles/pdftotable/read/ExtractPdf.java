@@ -7,7 +7,9 @@ package fr.antsfiles.pdftotable.read;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.antsfiles.pdftotable.model.Page;
 import org.apache.pdfbox.Loader;
@@ -35,7 +37,7 @@ public class ExtractPdf {
 
             AccessPermission ap = document.getCurrentAccessPermission();
             if (!ap.canExtractContent()) {
-                //throw new IOException("You do not have permission to extract text");
+                // throw new IOException("You do not have permission to extract text");
             }
             PDFTextStripper stripper;
             if (layoutStripper) {
@@ -47,12 +49,15 @@ public class ExtractPdf {
             stripper.setSortByPosition(true);
 
             for (int p = 1; p <= document.getNumberOfPages(); ++p) {
-                // Set the page interval to extract. If you don't, then all pages would be extracted.
+                // Set the page interval to extract. If you don't, then all pages would be
+                // extracted.
                 stripper.setStartPage(p);
                 stripper.setEndPage(p);
 
                 // let the magic happen
                 String text = stripper.getText(document);
+                String[] lines = text.split("\n");
+                text = Arrays.stream(lines).filter(l -> !l.isBlank()).collect(Collectors.joining("\n"));
 
                 // do some nice output with a header
                 String pageStr = String.format("page %d:", p);

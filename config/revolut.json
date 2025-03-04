@@ -1,0 +1,45 @@
+{
+  "space" : "   ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date  (UTC)" ],
+    "colMin" : 34,
+    "colMax" : 40,
+    "colMinLimit" : 9,
+    "colMaxLimit" : 25,
+    "value" : ""
+  }, {
+    "columnType" : "UNUSED",
+    "names" : [ "Valeur" ],
+    "colMin" : 41,
+    "colMax" : 49,
+    "colMinLimit" : 40,
+    "colMaxLimit" : 48,
+    "value" : "n°182 a"
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Description                                Argen" ],
+    "colMin" : 48,
+    "colMax" : 71,
+    "colMinLimit" : 40,
+    "colMaxLimit" : 92,
+    "value" : ""
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "t sortant" ],
+    "colMin" : 113,
+    "colMax" : 120,
+    "colMinLimit" : 92,
+    "colMaxLimit" : 104,
+    "value" : ""
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "entrant" ],
+    "colMin" : 134,
+    "colMax" : 142,
+    "colMinLimit" : 113,
+    "colMaxLimit" : 122,
+    "value" : ""
+  } ]
+}

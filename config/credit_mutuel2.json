@@ -1,0 +1,37 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date" ],
+    "colMin" : 14,
+    "colMax" : 20,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 24,
+    "value" : ""
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Opération" ],
+    "colMin" : 39,
+    "colMax" : 50,
+    "colMinLimit" : 36,
+    "colMaxLimit" : 95,
+    "value" : "VIR SOLEDAD  SARL"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "Débit  EUROS" ],
+    "colMin" : 101,
+    "colMax" : 115,
+    "colMinLimit" : 101,
+    "colMaxLimit" : 118,
+    "value" : "900,00"
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "Crédit  EUROS" ],
+    "colMin" : 119,
+    "colMax" : 134,
+    "colMinLimit" : 119,
+    "colMaxLimit" : 147,
+    "value" : ""
+  } ]
+}

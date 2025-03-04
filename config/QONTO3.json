@@ -1,0 +1,37 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ".",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date  de valeur" ],
+    "colMin" : 0,
+    "colMax" : 16,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 34,
+    "value" : ""
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Transactions" ],
+    "colMin" : 19,
+    "colMax" : 33,
+    "colMinLimit" : 36,
+    "colMaxLimit" : 101,
+    "value" : "au 30/06/2024"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "Débit" ],
+    "colMin" : 92,
+    "colMax" : 99,
+    "colMinLimit" : 102,
+    "colMaxLimit" : 122,
+    "value" : ""
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "Crédit" ],
+    "colMin" : 110,
+    "colMax" : 118,
+    "colMinLimit" : 119,
+    "colMaxLimit" : 135,
+    "value" : ""
+  } ]
+}

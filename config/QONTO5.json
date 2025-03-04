@@ -1,0 +1,40 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ".",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date  de valeur" ],
+    "colMin" : 16,
+    "colMax" : 33,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 34,
+    "value" : ""
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Transactions" ],
+    "colMin" : 36,
+    "colMax" : 50,
+    "colMinLimit" : 36,
+    "colMaxLimit" : 101,
+    "value" : "24 au 31/10/2024"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "-  13.20  EUR" ],
+    "colMin" : 109,
+    "colMax" : 116,
+    "colMinLimit" : 97,
+    "colMaxLimit" : 115,
+    "value" : ""
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "" ],
+    "colMin" : 127,
+    "colMax" : 135,
+    "colMinLimit" : 115,
+    "colMaxLimit" : 138,
+    "value" : ""
+  } ],
+  "bicOrIdentifier" : "QNTOFRP1",
+  "dateFormat" : "dd/MM",
+  "amoutFormat" : "- ##.## EUR"
+}

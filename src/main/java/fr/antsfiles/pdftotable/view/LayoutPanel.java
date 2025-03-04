@@ -8,17 +8,27 @@ import fr.antsfiles.pdftotable.model.ColumnType;
 import fr.antsfiles.pdftotable.model.TableHeader;
 import fr.antsfiles.pdftotable.model.TableHeaderName;
 import fr.antsfiles.pdftotable.read.SettingsPersistance;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.event.CaretEvent;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
 /**
  *
@@ -26,12 +36,20 @@ import javax.swing.JPopupMenu;
 public class LayoutPanel extends javax.swing.JPanel {
 
     private MainControler mainControler;
+    private boolean loading = false;
 
     TableHeader tableHeaderManual;
     TableHeaderName tableHeaderNameDate;
     TableHeaderName tableHeaderNameDesc;
     TableHeaderName tableHeaderNameDebit;
     TableHeaderName tableHeaderNameCredit;
+
+    Map<ColumnType, Color> colorsForType = Map.of(ColumnType.DATE, Color.CYAN,
+            ColumnType.DESCRIPTION, Color.LIGHT_GRAY,
+            ColumnType.DEBIT, Color.ORANGE,
+            ColumnType.CREDIT, Color.GREEN);
+
+    Map<String, Highlighter> highlighters = new HashMap<>();
 
     SettingsPersistance persistance = new SettingsPersistance();
 
@@ -63,6 +81,13 @@ public class LayoutPanel extends javax.swing.JPanel {
             headerName.setColMaxLimit(colMax);
             headerName.setNames(List.of(txtExtract));
             updateManualSettingsLabel();
+
+            try {
+                jTextAreaInput.getHighlighter().addHighlight(cmin, cmax,
+                        new DefaultHighlighter.DefaultHighlightPainter(colorsForType.get(headerName.getColumnType())));
+            } catch (BadLocationException ex) {
+                Logger.getLogger(LayoutPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
@@ -83,6 +108,22 @@ public class LayoutPanel extends javax.swing.JPanel {
                 tableHeaderNameDebit,
                 tableHeaderNameCredit);
         tableHeaderManual = new TableHeader(names);
+
+        jTextFieldBic.addCaretListener((CaretEvent e) -> {
+            if (!loading) {
+                tableHeaderManual.setBicOrIdentifier(jTextFieldBic.getText());
+            }
+        });
+        jTextFieldAmoutFormat.addCaretListener((CaretEvent e) -> {
+            if (!loading) {
+                tableHeaderManual.setAmoutFormat(jTextFieldAmoutFormat.getText());
+            }
+        });
+        jTextFieldDateFormat.addCaretListener((CaretEvent e) -> {
+            if (!loading) {
+                tableHeaderManual.setDateFormat(jTextFieldDateFormat.getText());
+            }
+        });
 
         updateManualSettingsLabel();
 
@@ -121,11 +162,12 @@ public class LayoutPanel extends javax.swing.JPanel {
         if (jComboBoxPredefineLayout.getSelectedItem() == null) {
             return;
         }
+        loading = true;
         String name = jComboBoxPredefineLayout.getSelectedItem().toString();
         TableHeader th = persistance.load(name);
         if (th != null) {
-            jTextFieldLayoutName.setText(name);
             tableHeaderManual = th;
+            jTextFieldLayoutName.setText(name);
             tableHeaderNameDate = th.getHeaderNames().stream().filter(h -> h.getColumnType() == ColumnType.DATE).findFirst().get();
             tableHeaderNameDebit = th.getHeaderNames().stream().filter(h -> h.getColumnType() == ColumnType.DEBIT).findFirst().get();
             tableHeaderNameCredit = th.getHeaderNames().stream().filter(h -> h.getColumnType() == ColumnType.CREDIT).findFirst().get();
@@ -133,9 +175,14 @@ public class LayoutPanel extends javax.swing.JPanel {
         }
         updateManualSettingsLabel();
 
+        loading = false;
     }
 
     private void updateManualSettingsLabel() {
+
+        jTextFieldBic.setText(tableHeaderManual.getBicOrIdentifier() != null ? tableHeaderManual.getBicOrIdentifier() : "");
+        jTextFieldDateFormat.setText(tableHeaderManual.getDateFormat() != null ? tableHeaderManual.getDateFormat() : "");
+        jTextFieldAmoutFormat.setText(tableHeaderManual.getAmoutFormat() != null ? tableHeaderManual.getAmoutFormat() : "");
 
         String txt = tableHeaderManual.getHeaderNames().stream().
                 map(h
@@ -143,6 +190,31 @@ public class LayoutPanel extends javax.swing.JPanel {
                 + " " + h.getColMinLimit() + "-" + h.getColMaxLimit()
                 ).collect(Collectors.joining(" "));
         jLabelSettings.setText(txt);
+
+        String maxLine = Arrays.stream(jTextAreaInput.getText().split("\n")).max((s1, s2) -> Integer.compare(s1.length(), s2.length())).get();
+        int offset = 0;
+        for (String l : jTextAreaInput.getText().split("\n")) {
+            if (l.length() == maxLine.length()) {
+                break;
+            }
+            offset = offset + l.length() + 1;
+        }
+
+        System.out.println("offset = " + offset);
+        System.out.println("maxLine = " + maxLine);
+
+        jTextAreaInput.getHighlighter().removeAllHighlights();
+        int foffset = offset;
+        tableHeaderManual.getHeaderNames().forEach(h -> {
+
+            try {
+                jTextAreaInput.getHighlighter().addHighlight(foffset + h.getColMinLimit(), foffset + h.getColMaxLimit(),
+                        new DefaultHighlighter.DefaultHighlightPainter(colorsForType.get(h.getColumnType())));
+            } catch (BadLocationException ex) {
+                Logger.getLogger(LayoutPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
     }
 
     public void setMainControler(MainControler mainControler) {
@@ -182,6 +254,13 @@ public class LayoutPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabelManualSettings = new javax.swing.JLabel();
         jButtonReadLayoutManual = new javax.swing.JButton();
+        jPanelParam = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldBic = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldDateFormat = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldAmoutFormat = new javax.swing.JTextField();
         jLabelSettings = new javax.swing.JLabel();
 
         setLayout(new java.awt.BorderLayout());
@@ -218,6 +297,7 @@ public class LayoutPanel extends javax.swing.JPanel {
         jPanel2.add(jComboBoxPredefineLayout, gridBagConstraints);
 
         jTextFieldLayoutName.setText("LayoutX");
+        jTextFieldLayoutName.setMaximumSize(new java.awt.Dimension(500, 2147483647));
         jTextFieldLayoutName.setMinimumSize(new java.awt.Dimension(100, 25));
         jTextFieldLayoutName.setPreferredSize(new java.awt.Dimension(100, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -236,6 +316,7 @@ public class LayoutPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 7;
         gridBagConstraints.ipady = 5;
@@ -251,10 +332,10 @@ public class LayoutPanel extends javax.swing.JPanel {
 
         jLabelManualSettings.setText("<html>manual settings:<br>1: find the table header line<br>2: highlight the column head with long left click as large as the column is, from left to right<br>3:rigth click then select what is the column, then click the button \"read layout manual\"");
         jLabelManualSettings.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabelManualSettings.setMaximumSize(new java.awt.Dimension(500, 68));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 0.4;
         jPanel2.add(jLabelManualSettings, gridBagConstraints);
@@ -270,6 +351,34 @@ public class LayoutPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel2.add(jButtonReadLayoutManual, gridBagConstraints);
+
+        jPanelParam.setPreferredSize(new java.awt.Dimension(250, 69));
+        jPanelParam.setLayout(new java.awt.GridLayout(3, 2));
+
+        jLabel3.setText("Bic Or Id");
+        jPanelParam.add(jLabel3);
+
+        jTextFieldBic.setText("bic");
+        jPanelParam.add(jTextFieldBic);
+
+        jLabel4.setText("DateFormat");
+        jPanelParam.add(jLabel4);
+
+        jTextFieldDateFormat.setText("dd/mm");
+        jPanelParam.add(jTextFieldDateFormat);
+
+        jLabel5.setText("AmountFormat");
+        jPanelParam.add(jLabel5);
+
+        jTextFieldAmoutFormat.setText("-##.##");
+        jPanelParam.add(jTextFieldAmoutFormat);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel2.add(jPanelParam, gridBagConstraints);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.NORTH);
 
@@ -318,12 +427,19 @@ public class LayoutPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBoxPredefineLayout;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelManualSettings;
     private javax.swing.JLabel jLabelSettings;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelParam;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaInput;
+    private javax.swing.JTextField jTextFieldAmoutFormat;
+    private javax.swing.JTextField jTextFieldBic;
+    private javax.swing.JTextField jTextFieldDateFormat;
     private javax.swing.JTextField jTextFieldLayoutName;
     // End of variables declaration//GEN-END:variables
 }

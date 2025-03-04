@@ -26,7 +26,10 @@ public class SettingsPersistance {
     public List<String> getAll() {
 
         try {
-            return Files.walk(Path.of(SETTINGS_FOLDER)).filter(p -> p.getFileName().toString().endsWith(".json")).map(p -> p.getFileName().toString().replace(".json", "")).collect(Collectors.toList());
+            return Files.walk(Path.of(SETTINGS_FOLDER))
+                    .filter(p -> p.getFileName().toString().endsWith(".json")).map(p -> p.getFileName().toString().replace(".json", ""))
+                    .sorted()
+                    .collect(Collectors.toList());
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             return List.of();

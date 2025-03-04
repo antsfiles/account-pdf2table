@@ -1,0 +1,37 @@
+{
+  "space" : "  ",
+  "valueCentsSeperator" : ",",
+  "headerNames" : [ {
+    "columnType" : "DATE",
+    "names" : [ "Date" ],
+    "colMin" : 12,
+    "colMax" : 18,
+    "colMinLimit" : 0,
+    "colMaxLimit" : 19,
+    "value" : ""
+  }, {
+    "columnType" : "DESCRIPTION",
+    "names" : [ "Opération" ],
+    "colMin" : 21,
+    "colMax" : 32,
+    "colMinLimit" : 22,
+    "colMaxLimit" : 106,
+    "value" : "tisfait pas, vous pouvez saisir gratuitement le Médiateur de La Banque Post"
+  }, {
+    "columnType" : "DEBIT",
+    "names" : [ "Débit (¤)" ],
+    "colMin" : 108,
+    "colMax" : 119,
+    "colMinLimit" : 106,
+    "colMaxLimit" : 120,
+    "value" : ""
+  }, {
+    "columnType" : "CREDIT",
+    "names" : [ "Crédit (¤)" ],
+    "colMin" : 125,
+    "colMax" : 137,
+    "colMinLimit" : 124,
+    "colMaxLimit" : 147,
+    "value" : ""
+  } ]
+}

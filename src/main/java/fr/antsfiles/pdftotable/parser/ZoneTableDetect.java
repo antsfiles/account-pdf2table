@@ -3,15 +3,19 @@
  */
 package fr.antsfiles.pdftotable.parser;
 
-import static fr.antsfiles.pdftotable.model.ColumnType.DATE;
-
 import fr.antsfiles.pdftotable.model.ColumnType;
+import static fr.antsfiles.pdftotable.model.ColumnType.DATE;
 import fr.antsfiles.pdftotable.model.Operation;
+import fr.antsfiles.pdftotable.model.Page;
 import fr.antsfiles.pdftotable.model.TableHeader;
 import fr.antsfiles.pdftotable.model.TableHeaderName;
-import fr.antsfiles.pdftotable.model.Page;
+import java.time.MonthDay;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -230,10 +234,10 @@ public class ZoneTableDetect {
 
                 extractLine = extractLine.replace("EUR", "");
                 extractLine = extractLine.replace("€", "").trim();
-                if(extractLine.indexOf('-') >= 0 &&  headerName.getColumnType() == ColumnType.CREDIT){
+                if (extractLine.indexOf('-') >= 0 && headerName.getColumnType() == ColumnType.CREDIT) {
                     return "";
                 }
-                if(extractLine.indexOf('+') >= 0 &&  headerName.getColumnType() == ColumnType.DEBIT){
+                if (extractLine.indexOf('+') >= 0 && headerName.getColumnType() == ColumnType.DEBIT) {
                     return "";
                 }
 
@@ -279,6 +283,35 @@ public class ZoneTableDetect {
     }
 
     private String extractPattern(TableHeaderName headerName, String s) {
+        if (headerName.getColumnType() == DATE) {
+
+            if (tableHeader.getDateFormat() != null && !tableHeader.getDateFormat().isBlank()) {
+                try {
+                    DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                            .parseCaseInsensitive()
+                            .append(DateTimeFormatter.ofPattern(tableHeader.getDateFormat())).toFormatter(Locale.ENGLISH);
+
+                    String text = s.trim();
+
+                    System.out.println("Try parse date in '" + text + "':" + tableHeader.getDateFormat());
+
+                    TemporalAccessor parsedDate = formatter.parse(text);
+
+                    System.out.println("OK parse date in '" + s + "':" + parsedDate);
+
+                    String out = String.format("%02d/%02d/%s", MonthDay.from(parsedDate).getDayOfMonth(), MonthDay.from(parsedDate).getMonthValue(), year);
+
+                    System.out.println("OK read date in '" + s + "':" + out);
+
+                    return out;
+                } catch (Exception e) {
+
+                    System.out.println("Err read date in '" + s + "':" + e.getMessage());
+                    return "";
+                }
+            }
+        }
+
         for (String r : headerName.getColumnType().getRegexes()) {
             Pattern pattern = Pattern.compile(r);
             Matcher matcher = pattern.matcher(s);

@@ -6,7 +6,6 @@ package fr.antsfiles.pdftotable.parser;
 
 import fr.antsfiles.pdftotable.model.Operation;
 import fr.antsfiles.pdftotable.model.TableHeader;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractParser {
 
-    public String year = "2023";
+    public String year = "2024";
 
     protected List<Operation> operations = new ArrayList<>();
     protected Operation lastOperation;

@@ -17,13 +17,15 @@ import org.junit.jupiter.api.Test;
  */
 public class ExtractPdfTest {
 
+    public static final String RESOURCES = "/home/tonio/Desktop/didier/2024-12-13/";//"src/test/resources";
+
     /**
      * Test of read method, of class ExtractPdf.
      */
     @Test
     public void testPdfToTxt() throws Exception {
         System.out.println("testPdfToTxt");
-        File dirPdf = new File("src/test/resources");
+        File dirPdf = new File(RESOURCES);
         File[] files = dirPdf.listFiles();
         Stream.of(files).filter(f -> f.getName().endsWith(".pdf")).forEach(f -> {
             System.out.println("testPdfToTxt " + f + " ...");
@@ -41,12 +43,12 @@ public class ExtractPdfTest {
     @Test
     public void testPdfToTxtLayout() throws Exception {
         System.out.println("testPdfToTxt");
-        File dirPdf = new File("src/test/resources");
+        File dirPdf = new File(RESOURCES);
         File[] files = dirPdf.listFiles();
         Stream.of(files).filter(f -> f.getName().endsWith(".pdf")).forEach(f -> {
             System.out.println("testPdfToTxt " + f + " ...");
             ExtractPdf instance = new ExtractPdf();
-            instance.setLayoutStripper(true);
+            instance.setLayoutStripper(false);
             try {
                 List<Page> pages = instance.read(f);
                 List<String> lines = pages.stream().map(p -> p.getAlllines()).collect(Collectors.toList());

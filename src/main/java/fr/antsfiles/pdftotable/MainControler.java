@@ -1,7 +1,9 @@
 package fr.antsfiles.pdftotable;
 
-import fr.antsfiles.pdftotable.parser.AbstractParser;
 import fr.antsfiles.pdftotable.model.Operation;
+import fr.antsfiles.pdftotable.model.Page;
+import fr.antsfiles.pdftotable.model.TableHeader;
+import fr.antsfiles.pdftotable.parser.AbstractParser;
 import fr.antsfiles.pdftotable.parser.ParserBNP;
 import fr.antsfiles.pdftotable.parser.ParserBRED;
 import fr.antsfiles.pdftotable.parser.ParserBankPopulaire2;
@@ -14,10 +16,8 @@ import fr.antsfiles.pdftotable.parser.ParserLine;
 import fr.antsfiles.pdftotable.parser.ParserMillies;
 import fr.antsfiles.pdftotable.parser.ParserQonto;
 import fr.antsfiles.pdftotable.parser.ParserSG;
-import fr.antsfiles.pdftotable.model.TableHeader;
 import fr.antsfiles.pdftotable.parser.ZoneTableDetect;
 import fr.antsfiles.pdftotable.read.ExtractPdf;
-import fr.antsfiles.pdftotable.model.Page;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class MainControler {
     private static final Logger LOGGER = Logger.getLogger(MainControler.class.getName());
 
     private final BehaviorSubject<String> status = BehaviorSubject.createDefault("");
-    private final BehaviorSubject<String> year = BehaviorSubject.createDefault("2023");
+    private final BehaviorSubject<String> year = BehaviorSubject.createDefault("2024");
     private final BehaviorSubject<String> outText = BehaviorSubject.createDefault("");
     private final BehaviorSubject<List<Operation>> outOperation = BehaviorSubject.createDefault(List.of());
     private final BehaviorSubject<String> inText = BehaviorSubject.createDefault("");
@@ -119,7 +119,8 @@ public class MainControler {
 
             AbstractParser parser = parsers.get(0);
             if (!pages.isEmpty()) {
-                Optional<AbstractParser> oparser = parsers.stream().filter(p -> p.isMine(pages.get(0).getAlllines())).findFirst();
+                Optional<AbstractParser> oparser = parsers.stream().filter(p -> p.isMine(pages.get(0).getAlllines()))
+                        .findFirst();
                 if (oparser.isPresent()) {
                     format.onNext(oparser.get().getFormat());
                     parser = oparser.get();

@@ -15,7 +15,37 @@ public class TableHeader {
     private String valueCentsSeperator = ",";
     private List<TableHeaderName> headerNames;
 
+    private String bicOrIdentifier;
+
+    private String dateFormat;
+
+    private String amoutFormat;
+
     public TableHeader() {
+    }
+
+    public String getBicOrIdentifier() {
+        return bicOrIdentifier;
+    }
+
+    public void setBicOrIdentifier(String bicOrIdentifier) {
+        this.bicOrIdentifier = bicOrIdentifier;
+    }
+
+    public String getAmoutFormat() {
+        return amoutFormat;
+    }
+
+    public void setAmoutFormat(String amoutFormat) {
+        this.amoutFormat = amoutFormat;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
     public TableHeader(List<TableHeaderName> headerNames) {
