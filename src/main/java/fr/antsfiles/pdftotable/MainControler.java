@@ -136,8 +136,11 @@ public class MainControler {
             StringBuilder sbIn = new StringBuilder();
             List<Operation> opsAll = zoneTableDetect.getOperations();
             for (Page page : pages) {
-                sbIn.append("-\n");
-                sbIn.append(page.getAlllines());
+                //sbIn.append("-\n");
+                for (String l : page.getLines()) {
+                    sbIn.append(l).append("\n");
+                }
+
             }
 
             inText.onNext(sbIn.toString());

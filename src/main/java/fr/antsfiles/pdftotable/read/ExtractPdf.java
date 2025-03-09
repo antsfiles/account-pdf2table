@@ -4,20 +4,18 @@
  */
 package fr.antsfiles.pdftotable.read;
 
+import fr.antsfiles.pdftotable.model.Page;
+import io.github.jonathanlink.PDFLayoutTextStripper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import fr.antsfiles.pdftotable.model.Page;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.text.PDFTextStripper;
-
-import io.github.jonathanlink.PDFLayoutTextStripper;
 
 /**
  *
@@ -67,10 +65,11 @@ public class ExtractPdf {
                 }
                 System.out.println();
                 System.out.println(text.trim());
-                pages.add(new Page(text.trim()));
+                pages.add(new Page(text));
                 System.out.println();
             }
         }
+
         return pages;
     }
 }

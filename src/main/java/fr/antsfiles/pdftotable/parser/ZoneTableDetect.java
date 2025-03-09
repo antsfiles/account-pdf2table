@@ -9,13 +9,9 @@ import fr.antsfiles.pdftotable.model.Operation;
 import fr.antsfiles.pdftotable.model.Page;
 import fr.antsfiles.pdftotable.model.TableHeader;
 import fr.antsfiles.pdftotable.model.TableHeaderName;
-import java.time.MonthDay;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.TemporalAccessor;
+import fr.antsfiles.pdftotable.read.DateExtractor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,8 +44,12 @@ public class ZoneTableDetect {
         lineHeader = 0;
         operations.clear();
         this.tableHeader = tableHeader;
+
+        int pageNo = 0;
         for (Page page : pages) {
+            System.out.println(" --- PAGE " + pageNo + " ");
             detectTableByPage(tableHeader, page);
+            pageNo++;
         }
         operations.forEach(o -> {
             System.out.println("op: " + o.toPrettyString());
@@ -65,7 +65,22 @@ public class ZoneTableDetect {
         int lineNo = 0;
         this.tableHeader = tableHeader;
         Operation lastOp = null;
+        int lineSize = 0;
         for (String line : page.getLines()) {
+            if (lineSize < line.length()) {
+                lineSize = line.length();
+            }
+        }
+        System.out.println("lineSize = " + lineSize);
+
+        for (String line : page.getLines()) {
+            //fix error line length
+            while (line.length() < lineSize) {
+                line = " " + line;
+            }
+            if (line.contains("€1  432.37")) {
+                System.err.println(line);
+            }
             if (isHeader(tableHeader, line)) {
                 //line header found
                 lineHeader = lineNo;
@@ -76,7 +91,7 @@ public class ZoneTableDetect {
                     TableHeaderName tableHeaderName = tableHeader.getHeaderNames().get(i);
                     TableHeaderName prev = i > 0 ? tableHeader.getHeaderNames().get(i - 1) : null;
                     TableHeaderName next = i < (tableHeader.getHeaderNames().size() - 1) ? tableHeader.getHeaderNames().get(i + 1) : null;
-                    findZoneLimit(tableHeaderName, line, prev, next);
+                    //findZoneLimit(tableHeaderName, line, prev, next);
                 }
                 continue;
             }
@@ -177,7 +192,7 @@ public class ZoneTableDetect {
 
     private boolean isHeader(TableHeader tableHeader, String txt) {
         for (TableHeaderName tableHeaderName : tableHeader.getHeaderNames()) {
-            if (!tableHeaderName.getNames().stream().anyMatch(hn -> txt.contains(hn))) {
+            if (tableHeaderName.getColumnType() != ColumnType.UNUSED && !tableHeaderName.getNames().stream().anyMatch(hn -> txt.contains(hn))) {
                 return false;
             }
             System.out.println("fr.antsfiles.pdftotable.parser.ZoneTableDetect.isHeader()");
@@ -229,7 +244,32 @@ public class ZoneTableDetect {
             if (headerName.getColumnType() == ColumnType.UNUSED) {
                 return extractLine;
             }
+
+            if (headerName.getColumnType() == DATE) {
+                String v = extractPattern(headerName, extractLine);
+                return v;
+            }
+
             if (headerName.getColumnType() == ColumnType.DEBIT || headerName.getColumnType() == ColumnType.CREDIT) {
+
+                if (extractCenter.isBlank()) {
+                    return extractCenter;
+                }
+
+                //2 values?
+                String text = extractLine.trim().replaceAll("\\s+", " "); //reduce space
+                if (text.contains("€") && tableHeader.getAmoutFormat() != null && !tableHeader.getAmoutFormat().isBlank()) {
+                    // Regex pattern to match currency values with Euro symbol
+                    String regex = "€\\d{1,3}(?:\\s?\\d{3})*(?:\\.\\d{2})?";
+                    regex = tableHeader.getAmoutFormat();
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(text);
+                    if (matcher.find()) {
+                        // Extract the first match
+                        return matcher.group();
+                    }
+                }
+
                 extractLine = extractLine.replaceAll(" ", "");
 
                 extractLine = extractLine.replace("EUR", "");
@@ -285,31 +325,11 @@ public class ZoneTableDetect {
     private String extractPattern(TableHeaderName headerName, String s) {
         if (headerName.getColumnType() == DATE) {
 
-            if (tableHeader.getDateFormat() != null && !tableHeader.getDateFormat().isBlank()) {
-                try {
-                    DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                            .parseCaseInsensitive()
-                            .append(DateTimeFormatter.ofPattern(tableHeader.getDateFormat())).toFormatter(Locale.ENGLISH);
-
-                    String text = s.trim();
-
-                    System.out.println("Try parse date in '" + text + "':" + tableHeader.getDateFormat());
-
-                    TemporalAccessor parsedDate = formatter.parse(text);
-
-                    System.out.println("OK parse date in '" + s + "':" + parsedDate);
-
-                    String out = String.format("%02d/%02d/%s", MonthDay.from(parsedDate).getDayOfMonth(), MonthDay.from(parsedDate).getMonthValue(), year);
-
-                    System.out.println("OK read date in '" + s + "':" + out);
-
-                    return out;
-                } catch (Exception e) {
-
-                    System.out.println("Err read date in '" + s + "':" + e.getMessage());
-                    return "";
-                }
+            String out = new DateExtractor(tableHeader, year).extractDate(s);
+            if (out != null) {
+                return out;
             }
+            return out == null ? "" : out;
         }
 
         for (String r : headerName.getColumnType().getRegexes()) {

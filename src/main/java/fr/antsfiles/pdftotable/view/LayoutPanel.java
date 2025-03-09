@@ -200,20 +200,34 @@ public class LayoutPanel extends javax.swing.JPanel {
             offset = offset + l.length() + 1;
         }
 
-        System.out.println("offset = " + offset);
-        System.out.println("maxLine = " + maxLine);
-
         jTextAreaInput.getHighlighter().removeAllHighlights();
-        int foffset = offset;
-        tableHeaderManual.getHeaderNames().forEach(h -> {
+        System.out.println("maxLine = " + maxLine.length());
+        System.out.println("nbLines = " + jTextAreaInput.getText().split("\n").length);
 
-            try {
-                jTextAreaInput.getHighlighter().addHighlight(foffset + h.getColMinLimit(), foffset + h.getColMaxLimit(),
-                        new DefaultHighlighter.DefaultHighlightPainter(colorsForType.get(h.getColumnType())));
-            } catch (BadLocationException ex) {
-                Logger.getLogger(LayoutPanel.class.getName()).log(Level.SEVERE, null, ex);
+        int l = jTextAreaInput.getText().length();
+        String[] lines = jTextAreaInput.getText().split("\n");
+        int nbLines = lines.length;
+        try {
+            offset = 0;
+            for (int i = 0; i < nbLines; i++) {
+                int foffset = offset;
+                tableHeaderManual.getHeaderNames().forEach(h -> {
+                    try {
+                        jTextAreaInput.getHighlighter().addHighlight(foffset + h.getColMinLimit(), foffset + h.getColMaxLimit(),
+                                new DefaultHighlighter.DefaultHighlightPainter(colorsForType.get(h.getColumnType())));
+                    } catch (BadLocationException ex) {
+                        Logger.getLogger(LayoutPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                offset = offset + lines[i].length() + 1;
             }
-        });
+
+            System.out.println("jTextAreaInput.getHighlighter() = " + jTextAreaInput.getHighlighter().getHighlights().length);
+            System.out.println("jTextAreaInput.getText().length() = " + jTextAreaInput.getText().length());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -266,7 +280,7 @@ public class LayoutPanel extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         jTextAreaInput.setColumns(20);
-        jTextAreaInput.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+        jTextAreaInput.setFont(new java.awt.Font("Hack", 0, 10)); // NOI18N
         jTextAreaInput.setRows(5);
         jScrollPane1.setViewportView(jTextAreaInput);
 
@@ -393,6 +407,7 @@ public class LayoutPanel extends javax.swing.JPanel {
 
         mainControler.setTableHeaderSetting(tableHeaderManual);
         mainControler.readFileWithLayout(mainControler.getFile());
+        updateManualSettingsLabel();
 
     }//GEN-LAST:event_jButtonReadLayoutManualActionPerformed
 

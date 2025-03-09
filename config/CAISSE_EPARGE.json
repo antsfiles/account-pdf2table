@@ -41,5 +41,8 @@
     "colMinLimit" : 0,
     "colMaxLimit" : 0,
     "value" : null
-  } ]
+  } ],
+  "bicOrIdentifier" : null,
+  "dateFormat" : null,
+  "amoutFormat" : null
 }
